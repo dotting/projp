@@ -18,7 +18,11 @@
     "eslint": "latest",
     "eslint-config-next": "latest",
     "next": "latest",
+    "openai": "^4.47.1",
     "react": "latest",
     "react-dom": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "20.12.12"
   }
 }
