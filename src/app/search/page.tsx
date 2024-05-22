@@ -5,10 +5,10 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import NextLink from 'next/link';
-import  Searchbar  from '../../components/searchbar';
-import jsonData from '../../resources/projdb_comp.json'
+import  Searchbar  from 'components/searchbar';
+import jsonData from 'resources/projdb_comp.json'
 import { useParams } from "next/navigation";
-import Restbubble from '../../components/Restbubble';
+import Restbubble from 'components/Restbubble';
 
 function Card(key=[]) {   
     console.log('key');

@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "toolpad-studio:dev": "toolpad-studio dev ./my-toolpad-app",
+    "toolpad-studio:build": "toolpad-studio build ./my-toolpad-app",
+    "toolpad-studio:start": "toolpad-studio start ./my-toolpad-app"
   },
   "dependencies": {
     "@emotion/cache": "latest",
@@ -15,9 +18,11 @@
     "@mui/icons-material": "next",
     "@mui/material": "next",
     "@mui/material-nextjs": "next",
+    "@toolpad/studio": "^0.1.55",
     "eslint": "latest",
     "eslint-config-next": "latest",
     "next": "latest",
+    "next.js": "^1.0.3",
     "openai": "^4.47.1",
     "react": "latest",
     "react-dom": "latest"

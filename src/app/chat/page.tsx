@@ -45,8 +45,7 @@ const Gpt: React.FC = () => {
 
   const initChatBot = async () => {
     const openai = new OpenAI({
-      //apiKey: process.env.REACT_APP_OPENAI_API_KEY,
-      apiKey: 'sk-proj-uCg2xjfmI8XK35cEb6ONT3BlbkFJ8IoaSb4dvC3GDnOZ67SK',
+      apiKey: process.env.REACT_APP_OPENAI_API_KEY,
       dangerouslyAllowBrowser: true,
     });
 

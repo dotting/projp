@@ -13,6 +13,7 @@ export default function Searchbar(key) {
 
   const handleInputChange = (e) => {
     setKeyword(e.target.value);
+    console.log(keyword);
   };
   return (
     <Box>
@@ -22,7 +23,7 @@ export default function Searchbar(key) {
         value={keyword}
         defaultValue={key}
         onChange={handleInputChange} />
-      <IconButton aria-label="search" href={'/search/' + { keyword }} >
+      <IconButton aria-label="search" href={'/search/' + keyword} >
 
         <SearchIcon />
       </IconButton>

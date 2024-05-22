@@ -6,33 +6,26 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import restimages from 'resources/restimage/restimages.json' assert { type: "json" };
 
-function rest_dat(row){
-    return {name:row[3],
-    call:row[0],
-    item:row[4],
-    address:row[2]}
-}
 
 export default function Restbubble(data, action) {
-    const dat = rest_dat(data);
     return (
-        <Card >
+        <Card variant="outlined">
             <CardActionArea
-            //onClick={action}
+            onClick={action(data)}
             >
                 <CardMedia
                     component="img"
                     height="140"
-                    image={restimages[dat.item]}
+                    image={restimages[data.item]}
                     alt="가게 이미지"
                 />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
-                        {dat.name}
+                        {data.name}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        {dat.item} {dat.address}<br/>
-                        {dat.call&&(<>☎️{dat.call}</>)}
+                        {data.item} {data.address}<br/>
+                        {data.call&&(<>☎️{data.call}</>)}
                     </Typography>
                 </CardContent>
             </CardActionArea>

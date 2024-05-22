@@ -1,41 +1,38 @@
+'use client';
 import * as React from 'react';
 import Container from '@mui/material/Container';
+
+import { styled } from '@mui/material/styles';
+import Card from '@mui/material/Card';
+import CardMedia from '@mui/material/CardMedia';
+import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import NextLink from 'next/link';
-import jsonData from '../../resources/projdb_comp.json'
-import Restbubble from '../../components/Restbubble';
+import Paper from '@mui/material/Paper';
+import { useSearchParams } from "next/navigation";
+import jsonData from 'resources/transformed_data.json';
+import restimages from 'resources/restimage/restimages.json' assert { type: "json" };
+import Grid from "@mui/material/Unstable_Grid2";
 
-function Card(key=[]) {   
-    console.log('key');
-    
-    return (
-      <div className='cardContainer'>
-        <h2>상호명   {key[3]}</h2>
-        <h2>품목 {key[4]}</h2>
-        <h2>전화번호 {key[0]}</h2>
-        <h2>네이버 url {key[7]}</h2>
-      </div>
-    );
-  }
-  
 
-  function SearchedList() {
-    const keyword = "고기"; //검색 키워드
-  
-    const lists = jsonData.rows.filter((jsonData) => jsonData[3].includes(keyword)||jsonData[4].includes(keyword));//검색 조건
-    
-    return(
-      <>
-      <h1>검색 예시</h1>
-        {lists.map(jsonData => (
-          <Restbubble data={jsonData}{...jsonData} />
-        ))}
-      </>)
-  }
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));  
+
+
+function restData() {
+  const keyword = useSearchParams().get('restname');
+  return (jsonData.filter((jsonData) => jsonData.name.includes(keyword))[0]);
+}
 
 export default function About() {
+  let data = restData()
   return (
     <Container maxWidth="lg">
       <Box
@@ -47,16 +44,27 @@ export default function About() {
           alignItems: 'center',
         }}
       >
-        <Typography variant="h4" component="h1" sx={{ mb: 2 }}>
-          검색결과창
-        </Typography>
-        <Box sx={{ maxWidth: 'sm' }}>
-          <Button variant="contained" component={NextLink} href="/">
-            Go to the home page 
-          </Button>
-          {SearchedList()}
-        </Box>
+        <CardMedia
+          component="img"
+          height="140"
+          image={restimages[data.item]}
+          alt="가게 이미지"
+        />
+        <CardContent>
+          <Typography variant="h1" component="h1" sx={{ mb: 2 }}>
+            {String(data.name)}
+          </Typography>
+        </CardContent>
+
+        <Grid container spacing={2}>
+          <Grid xs={24}>
+            <Item>{data.item} {data.address}</Item>
+          </Grid>
+          {data.call&&(<Grid xs={12}>
+            <Item>{data.call&&(<>☎️{data.call}</>)}</Item>
+          </Grid>)}
+        </Grid>
       </Box>
     </Container>
-  );          
+  );
 }

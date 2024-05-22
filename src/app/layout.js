@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
 import './layout.css'
+import NextLink from 'next/link';
 import Copyright from '../components/Copyright';
 
 export default function RootLayout(props) {
@@ -18,7 +19,7 @@ export default function RootLayout(props) {
     <html lang="en">
                 
       <body>
-      <AppBar position="fixed">
+      <AppBar position="fixed" component={NextLink} href="/">
             <Toolbar>
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                 P의 여행
