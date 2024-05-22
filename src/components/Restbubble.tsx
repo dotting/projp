@@ -5,15 +5,17 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import restimages from 'resources/restimage/restimages.json' assert { type: "json" };
+import ModalAbout from 'components/ModalAbout';
 
+export default function Restbubble(rest, action = null ) {
+    const [showModal, setShowModal] = React.useState(false);
+    const data = rest.rest;
+    const clickModal = () => {setShowModal(!showModal)}
 
-export default function Restbubble(input, action) {
-    const data = input.input;
-    //console.log(data)
     return (
         <Card variant="outlined">
             <CardActionArea
-            //onClick={click(data)}
+            onClick={clickModal}
             >
                 <CardMedia
                     component="img"
@@ -30,7 +32,10 @@ export default function Restbubble(input, action) {
                         {data.call&&(<>☎️{data.call}</>)}
                     </Typography>
                 </CardContent>
+                {showModal && <ModalAbout data={data} clickModal={clickModal}/>}
             </CardActionArea>
-        </Card>
+            
+            
+        </Card>        
     );
 }

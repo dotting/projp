@@ -2,6 +2,7 @@
 import * as React from 'react';
 import Container from '@mui/material/Container';
 
+
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
@@ -18,13 +19,17 @@ import Grid from "@mui/material/Unstable_Grid2";
 import Restbubble from 'components/Restbubble';
 
 
+import router from 'next/router'
+import { SearchModalBox, SearchModalContent } from 'app/style/modal'
+
+
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: 'center',
   color: theme.palette.text.secondary,
-}));  
+}));
 
 
 function restData() {
@@ -33,41 +38,40 @@ function restData() {
 }
 
 export default function About() {
-  let data = restData()
-  console.log(data)
-  return (
-    <Container maxWidth="lg">
-      <Box
-        sx={{
-          my: 4,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <CardMedia
-          component="img"
-          height="140"
-          image={restimages[data.item]}
-          alt="가게 이미지"
-        />
-        <CardContent>
-          <Typography variant="h1" component="h1" sx={{ mb: 2 }}>
-            {String(data.name)}
-          </Typography>
-        </CardContent>
+  let rest = restData();
 
-        <Grid container spacing={2}>
-          <Grid xs={24}>
-            <Item>{data.item} {data.address}</Item>
-          </Grid>
-          {data.call&&(<Grid xs={12}>
-            <Item>{data.call&&(<>☎️{data.call}</>)}</Item>
-          </Grid>)}
-        </Grid>
-        <Restbubble input={data}></Restbubble>
-      </Box>
-    </Container>
+  console.log(rest)
+  return (<Container maxWidth="lg">
+          <Box
+            sx={{
+              my: 4,
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <CardMedia
+              component="img"
+              height="140"
+              image={restimages[rest.item]}
+              alt="가게 이미지"
+            />
+            <CardContent>
+              <Typography variant="h2" component="h1" sx={{ mb: 2 }}>
+                {rest.name}
+              </Typography>
+            </CardContent>
+
+            <Grid container spacing={2}>
+              <Grid xs={24}>
+                <Item>{rest.item} {rest.address}</Item>
+              </Grid>
+              {rest.call && (<Grid xs={12}>
+                <Item>{rest.call && (<>☎️{rest.call}</>)}</Item>
+              </Grid>)}
+            </Grid>
+            </Box>
+        </Container>
   );
 }

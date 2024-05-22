@@ -17,8 +17,12 @@ import OpenAI from 'openai';
 import React, { useEffect, useState } from 'react';
 import Message from './Message';
 import { MessageDto } from './MessageDto';
+import { Restaurant } from '@mui/icons-material';
+import Restbubble from 'components/Restbubble';
+import restDB from "resources/transformed_data.json";
 
-const dragonIcon = "public/free-icon-dragon-4475009.png"
+
+const dragonIcon = "dragonicon.png"
 
 const Gpt: React.FC = () => {
   const [isWaiting, setIsWaiting] = useState<boolean>(false);
@@ -39,13 +43,15 @@ const Gpt: React.FC = () => {
       {
         content: '안녕하세요, 저는 마니또입니다! 무엇이든 물어보세요!',
         isUser: false,
+        cards: null
       },
     ]);
   }, [assistant]);
 
   const initChatBot = async () => {
     const openai = new OpenAI({
-      apiKey: process.env.REACT_APP_OPENAI_API_KEY,
+      //apiKey: process.env.REACT_APP_OPENAI_API_KEY,
+      apiKey: 'sk-proj-uCg2xjfmI8XK35cEb6ONT3BlbkFJ8IoaSb4dvC3GDnOZ67SK',
       dangerouslyAllowBrowser: true,
     });
 
@@ -63,6 +69,58 @@ const Gpt: React.FC = () => {
     const newMessage = new MessageDto(isUser, content);
     return newMessage;
   };
+
+  const createNewCard = (content: any, isUser: boolean) => {
+    const newMessage = new MessageDto(isUser, null, content);
+    return newMessage;
+  };
+
+  const parsCitation = async (msg: any) => {
+    let restcitat = msg.content[0]["text"]["annotations"]
+    if (restcitat[0] != null) {
+      console.log(restcitat);
+
+      await openai.beta.threads.messages.create(thread.id, {
+        role: 'user',
+        content: JSON.stringify(restcitat),
+      });
+
+      const run = await openai.beta.threads.runs.create(thread.id, {
+        assistant_id: assistant.id, instructions: 'you MUST only respond as json array, u cannot say anything else, u cannot chat with user directly, don’t say anything other that the json text requested make that text in structured json format exactly like this [{"name": "Restaurant name in the text"},{"name": "Restaurant name in the text"}, ...{"name": "Restaurant name in the text"}]'
+      });
+
+      let response = await openai.beta.threads.runs.retrieve(thread.id, run.id);
+
+      while (response.status === 'in_progress' || response.status === 'queued') {
+        console.log('citation 기다리는 중...');
+        setIsWaiting(true);
+        await new Promise((resolve) => setTimeout(resolve, 5000));
+        response = await openai.beta.threads.runs.retrieve(thread.id, run.id);
+      }
+
+      setIsWaiting(false);
+
+      const messageList = await openai.beta.threads.messages.list(thread.id);
+      const lastMessage = messageList.data
+        .filter(
+          (message: any) =>
+            message.run_id === run.id && message.role === 'assistant',
+        )
+        .pop();
+      if (lastMessage) {
+        console.log(lastMessage.content[0]['text'].value);
+        let msg_names = JSON.parse(lastMessage.content[0]['text'].value);
+        msg_names.map((cons) => {
+          setMessages((prevMessages) => [
+            ...prevMessages,
+            createNewCard(restDB.filter((jsonData) => jsonData.name.includes(cons.name))[0], false),
+          ]);
+          //messages.push(createNewCard(restDB.filter((jsonData) => jsonData.name.includes(cons.name))[0], false));
+          //setMessages([...messages]);
+        })
+      }
+    }
+  }
 
   const handleSendMessage = async () => {
     messages.push(createNewMessage(input, true));
@@ -99,6 +157,7 @@ const Gpt: React.FC = () => {
 
     if (lastMessage) {
       console.log(lastMessage.content[0]['text'].value);
+      parsCitation(lastMessage);
       setMessages([
         ...messages,
         createNewMessage(lastMessage.content[0]['text'].value, false),
