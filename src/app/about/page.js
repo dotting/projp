@@ -15,6 +15,7 @@ import { useSearchParams } from "next/navigation";
 import jsonData from 'resources/transformed_data.json';
 import restimages from 'resources/restimage/restimages.json' assert { type: "json" };
 import Grid from "@mui/material/Unstable_Grid2";
+import Restbubble from 'components/Restbubble';
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -33,6 +34,7 @@ function restData() {
 
 export default function About() {
   let data = restData()
+  console.log(data)
   return (
     <Container maxWidth="lg">
       <Box
@@ -64,6 +66,7 @@ export default function About() {
             <Item>{data.call&&(<>☎️{data.call}</>)}</Item>
           </Grid>)}
         </Grid>
+        <Restbubble input={data}></Restbubble>
       </Box>
     </Container>
   );

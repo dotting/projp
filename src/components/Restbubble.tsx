@@ -7,11 +7,13 @@ import { CardActionArea } from '@mui/material';
 import restimages from 'resources/restimage/restimages.json' assert { type: "json" };
 
 
-export default function Restbubble(data, action) {
+export default function Restbubble(input, action) {
+    const data = input.input;
+    //console.log(data)
     return (
         <Card variant="outlined">
             <CardActionArea
-            onClick={action(data)}
+            //onClick={click(data)}
             >
                 <CardMedia
                     component="img"
